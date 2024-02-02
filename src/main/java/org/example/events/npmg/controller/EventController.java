@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.events.npmg.payload.DTOs.EventDto;
 import org.example.events.npmg.payload.response.MessageResponse;
 import org.example.events.npmg.service.EventService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,6 @@ public class EventController {
 
 	@PostMapping
 	public ResponseEntity<MessageResponse> createEvent(@RequestBody EventDto eventDto) {
-		System.out.println(eventDto);
 		return eventService.createEvent(eventDto);
 	}
 

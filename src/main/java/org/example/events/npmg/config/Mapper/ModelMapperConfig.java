@@ -16,9 +16,6 @@ public class ModelMapperConfig {
 				.setSkipNullEnabled(true)
 				.setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
 
-
-//		modelMapper.addConverter(new LocationUpdateConverter());
-
 		return modelMapper;
 	}
 }

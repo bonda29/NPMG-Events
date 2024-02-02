@@ -1,41 +1,46 @@
 package org.example.events.npmg.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.example.events.npmg.payload.Location;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
 @Table(name = "events")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Event {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private String description;
+    private String content;
 
-	@Embedded
-	private Location location;
+    @ManyToMany
+    @JoinTable(name = "events_categories",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "categories_id"))
+    private Set<Category> categories = new LinkedHashSet<>();
 
-	private LocalDateTime startDate;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	private LocalDateTime endDate;
+    private LocalDateTime dateOfCreation;
 
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "event_image_urls", joinColumns = @JoinColumn(name = "event_id"))
-	@Column(name = "image_url")
-	private List<String> imageUrls;
 
-	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-	private List<TicketType> ticketTypes = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "event_image_urls", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls;
 
+
+    @PrePersist
+    protected void onCreate() {
+        dateOfCreation = LocalDateTime.now();
+    }
 }

@@ -1,7 +1,6 @@
 package org.example.events.npmg.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.events.npmg.payload.request.TicketPurchaseRequest;
 import org.example.events.npmg.service.Images.AzureBlobUploader;
 import org.example.events.npmg.service.Images.QrCodeGenerator;
 import org.example.events.npmg.service.PaymentService;

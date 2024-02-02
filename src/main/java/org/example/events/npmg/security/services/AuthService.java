@@ -1,7 +1,6 @@
 package org.example.events.npmg.security.services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.events.npmg.security.jwt.JwtUtils;
 import org.example.events.npmg.models.Role.ERole;
 import org.example.events.npmg.models.Role.Role;
 import org.example.events.npmg.models.User;
@@ -11,6 +10,7 @@ import org.example.events.npmg.payload.response.JwtResponse;
 import org.example.events.npmg.payload.response.MessageResponse;
 import org.example.events.npmg.repository.RoleRepository;
 import org.example.events.npmg.repository.UserRepository;
+import org.example.events.npmg.security.jwt.JwtUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,12 +42,10 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     public ResponseEntity<?> registerUser(RegisterPayload data) {
-        if (userRepository.existsByUsername(data.getUsername()))
-        {
+        if (userRepository.existsByUsername(data.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Username is already taken!"));
         }
-        if (userRepository.existsByEmail(data.getEmail()))
-        {
+        if (userRepository.existsByEmail(data.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
         }
 

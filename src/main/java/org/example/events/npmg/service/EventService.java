@@ -1,68 +1,76 @@
 package org.example.events.npmg.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.events.npmg.config.Mapper.EventMapper;
 import org.example.events.npmg.exceptions.EventWithoutDataException;
 import org.example.events.npmg.models.Event;
 import org.example.events.npmg.payload.DTOs.EventDto;
 import org.example.events.npmg.payload.response.MessageResponse;
 import org.example.events.npmg.repository.EventRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.example.events.npmg.util.RepositoryUtil.findById;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
-	private final EventRepository eventRepository;
-	private final ModelMapper modelMapper;
+    private final EventRepository eventRepository;
+    private final ModelMapper modelMapper;
+    private final EventMapper eventMapper;
 
 
-	public ResponseEntity<MessageResponse> createEvent(EventDto data) {
+    public ResponseEntity<MessageResponse> createEvent(EventDto data) {
 
-		if (data.getName() == null) {
-			throw new EventWithoutDataException("Event must have a 'name'!");
-		} else if (data.getStartDate() == null || data.getEndDate() == null) {
-			throw new EventWithoutDataException("Event must have a proper date!");
-		}
+        if (data.getName() == null) {
+            throw new EventWithoutDataException("Event must have a 'name'!");
+        } else if (data.getContent() == null) {
+            throw new EventWithoutDataException("Event must have a 'content'!");
+        }
 
+        Event event = eventMapper.toEntity(data);
+        eventRepository.save(event);
 
-		Event event = modelMapper.map(data, Event.class);
-		eventRepository.save(event);
+        return ResponseEntity.ok(new MessageResponse("Event created successfully!"));
+    }
 
-		return ResponseEntity.ok(new MessageResponse("Event created successfully!"));
-	}
+    public ResponseEntity<List<EventDto>> getAllEvents() {
 
-	public ResponseEntity<List<EventDto>> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<EventDto> eventDtos = eventMapper.toDto(events);
 
-		List<Event> events = eventRepository.findAll();
-		Type listType = new TypeToken<List<EventDto>>() {
-		}.getType();
-		List<EventDto> eventDtos = modelMapper.map(events, listType);
+        return ResponseEntity.ok().body(eventDtos);
+    }
 
-		return ResponseEntity.ok().body(eventDtos);
-	}
+    public ResponseEntity<EventDto> getEventById(Long id) {
+        Event event = findById(eventRepository, id);
+        EventDto eventDto = eventMapper.toDto(event);
+        return ResponseEntity.ok().body(eventDto);
+    }
 
-	public ResponseEntity<EventDto> getEventById(Long id) {
-		Event event = findById(eventRepository, id);
-		EventDto eventDto = modelMapper.map(event, EventDto.class);
-		return ResponseEntity.ok().body(eventDto);
-	}
+    public ResponseEntity<MessageResponse> updateEvent(Long id, EventDto data) {
+        Event event = findById(eventRepository, id);
+        modelMapper.map(data, event);
+        eventRepository.save(event);
+        return ResponseEntity.ok(new MessageResponse("Event updated successfully!"));
+    }
 
-	public ResponseEntity<MessageResponse> updateEvent(Long id, EventDto data) {
-		Event event = findById(eventRepository, id);
-		modelMapper.map(data, event);
-		eventRepository.save(event);
-		return ResponseEntity.ok(new MessageResponse("Event updated successfully!"));
-	}
+    public ResponseEntity<MessageResponse> deleteEvent(Long id) {
+        eventRepository.delete(findById(eventRepository, id));
+        return ResponseEntity.ok(new MessageResponse("Event deleted successfully!"));
+    }
 
-	public ResponseEntity<MessageResponse> deleteEvent(Long id) {
-		eventRepository.delete(findById(eventRepository, id));
-		return ResponseEntity.ok(new MessageResponse("Event deleted successfully!"));
-	}
+    public ResponseEntity<?> searchEvents(String eventName, String categoryName, LocalDateTime date) {
+        Optional<List<Event>> events = eventRepository.findEvents(eventName, categoryName, date);
+        if (events.isPresent()) {
+            return ResponseEntity.ok().body(eventMapper.toDto(events.get()));
+        }
+
+        return ResponseEntity.badRequest().body(new MessageResponse("No events found!"));
+    }
 }
