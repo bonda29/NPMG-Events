@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,19 +18,19 @@ public class EventController {
 
 	private final EventService eventService;
 
-	@PostMapping
+	@PostMapping("/")
 	public ResponseEntity<MessageResponse> createEvent(@RequestBody EventDto eventDto) {
 		return eventService.createEvent(eventDto);
-	}
-
-	@GetMapping
-	public ResponseEntity<List<EventDto>> getAllEvents() {
-		return eventService.getAllEvents();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<EventDto> getEventById(@PathVariable Long id) {
 		return eventService.getEventById(id);
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<List<EventDto>> getAllEvents() {
+		return eventService.getAllEvents();
 	}
 
 	@PutMapping("/{id}")
@@ -41,4 +42,13 @@ public class EventController {
 	public ResponseEntity<MessageResponse> deleteEvent(@PathVariable Long id) {
 		return eventService.deleteEvent(id);
 	}
+
+	@GetMapping("/search")
+	public ResponseEntity<?> searchEvents(@RequestParam String name, @RequestParam String category, @RequestParam String date) {
+		LocalDateTime localDateTime = LocalDateTime.parse(date);
+		return eventService.searchEvents(name, category, localDateTime);
+	}
+
+
+
 }

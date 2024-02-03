@@ -44,12 +44,16 @@ public class User {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @Column(name = "date_of_creation")
     private LocalDateTime dateOfCreation;
 
-    private Boolean isBanned = false;
+    @Column(name = "is_banned", nullable = false, columnDefinition = "boolean default false")
+    private boolean isBanned;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private CodeSentToMail codeSentToMail;
 
     @PrePersist
     protected void onCreate() {
