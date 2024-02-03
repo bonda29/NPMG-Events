@@ -17,14 +17,6 @@ public class CategoryMapper {
     private final ModelMapper modelMapper;
 
     public CategoryMapper(ModelMapper modelMapper) {
-//        modelMapper.addMappings(new PropertyMap<Category, CategoryDto>() {
-//            @Override
-//            protected void configure() {
-//                map().setName(source.getName());
-//                map().setDescription(source.getDescription());
-//                map().setImageUrl(source.getImageUrl());
-//            }
-//        });
         this.modelMapper = modelMapper;
     }
 

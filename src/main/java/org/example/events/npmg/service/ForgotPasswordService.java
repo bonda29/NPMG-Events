@@ -15,7 +15,6 @@
 //import org.springframework.stereotype.Service;
 //import org.thymeleaf.TemplateEngine;
 //
-//import java.util.Optional;
 //import java.util.Random;
 //
 //@Service
@@ -33,7 +32,7 @@
 //    private int CODE_LENGTH;
 //
 //    public void requestPasswordReset(String email) {
-//        sendEmailWithTemplate(new EmailDTO(email, "Password Reset", "Please use the following code to reset your password: "));
+//        sendEmailWithTemplate(new EmailPayload(email, "Password Reset", "Please use the following code to reset your password: "));
 //    }
 //
 //    private String generateResetToken() {
@@ -41,7 +40,7 @@
 //    }
 //
 //    private void sendResetLink(String email, String token) {
-//        sendEmailWithTemplate(new EmailDTO(email, "Password Reset", "Please use the following code to reset your password: " + token));
+//        sendEmailWithTemplate(new EmailPayload(email, "Password Reset", "Please use the following code to reset your password: " + token));
 //    }
 //
 //    public boolean validateResetToken(String token, String email) {
@@ -56,7 +55,7 @@
 //    }
 //
 //    public void sendConfirmation(String email) {
-//        sendEmailWithTemplate(new EmailDTO(email, "Password Reset Confirmation", "Your password has been successfully reset."));
+//        sendEmailWithTemplate(new EmailPayload(email, "Password Reset Confirmation", "Your password has been successfully reset."));
 //    }
 //
 //    private String generateCode() {
@@ -69,8 +68,47 @@
 //        return code.toString();
 //    }
 //
-//    public ResponseEntity<String> sendEmailWithTemplate(EmailDTO emailDTO) {
-//        // Existing logic to send email with reset code
+//    public ResponseEntity<String> sendEmailWithTemplate(EmailPayload emailDTO) {
+//        Object object = loadObjectByEmail(emailDTO.getTo());
+//        if (object == null)
+//        {
+//            return ResponseEntity.badRequest().body("Email is not present!");
+//        }
+//
+//        CodeSentToMail codeSentToMail = new CodeSentToMail();
+//
+//        codeSentToMail.setEmail(emailDTO.getTo());
+//        String generatedPassword = generateCode();
+//        codeSentToMail.setCode(generatedPassword);
+//
+//
+//        if (codeSentToMailRepository.findByEmail(emailDTO.getTo()).isPresent())
+//        {
+//            codeSentToMailRepository.updateCode(generatedPassword, emailDTO.getTo());
+//            System.out.println("Code updated successfully");
+//        }
+//        else
+//        {
+//            codeSentToMailRepository.save(codeSentToMail);
+//        }
+//        try
+//        {
+//            MimeMessage message = javaMailSender.createMimeMessage();
+//            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//
+//            helper.setFrom("admin@bonda.tech");
+//            helper.setTo(emailDTO.getTo());
+//            helper.setSubject(emailDTO.getSubject());
+//
+//            String emailContent = createEmailContent(emailDTO.getName(), generatedPassword);
+//            helper.setText(emailContent, true); // Set the second parameter to true for HTML content
+//
+//            javaMailSender.send(message);
+//            return ResponseEntity.ok("Email sent successfully");
+//        } catch (MessagingException e)
+//        {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send email");
+//        }
 //    }
 //
 //    // Existing methods...

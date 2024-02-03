@@ -52,6 +52,8 @@ public class User {
     @Column(name = "is_banned", nullable = false, columnDefinition = "boolean default false")
     private boolean isBanned;
 
+    private String profilePictureUrl;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private CodeSentToMail codeSentToMail;
 

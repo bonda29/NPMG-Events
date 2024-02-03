@@ -25,5 +25,6 @@ public class UserDto {
     private String email;
     private Set<Role> roles;
     private LocalDateTime dateOfCreation;
+    private String profilePictureUrl;
     private boolean isBanned;
 }
