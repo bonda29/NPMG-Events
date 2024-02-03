@@ -15,23 +15,23 @@ import java.util.Set;
 public class UserController {
     private final UserService userService;
 
-    @PutMapping("/{userId}/username")
-    public ResponseEntity<MessageResponse> changeUserUsername(@PathVariable Long userId, @RequestBody String username) {
-        return userService.changeUserUsername(userId, username);
+    @PutMapping("/{id}/username")
+    public ResponseEntity<MessageResponse> changeUserUsername(@PathVariable Long id, @RequestBody String username) {
+        return userService.changeUserUsername(id, username);
     }
 
-    @PutMapping("/{userId}/ban")
-    public ResponseEntity<MessageResponse> changeUserBanStatus(@PathVariable Long userId) {
-        return userService.changeUserBanStatus(userId);
+    @PutMapping("/{id}/ban")
+    public ResponseEntity<MessageResponse> changeUserBanStatus(@PathVariable Long id) {
+        return userService.changeUserBanStatus(id);
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<MessageResponse> deleteUser(@PathVariable Long userId) {
-        return userService.deleteUser(userId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable Long id) {
+        return userService.deleteUser(id);
     }
 
-    @PutMapping("/{userId}/role")
-    public ResponseEntity<MessageResponse> changeUserRole(@PathVariable Long userId, @RequestBody Set<Role> roles) {
-        return userService.changeUserRole(userId, roles);
+    @PutMapping("/{id}/role")
+    public ResponseEntity<MessageResponse> changeUserRole(@PathVariable Long id, @RequestBody Set<Role> roles) {
+        return userService.changeUserRole(id, roles);
     }
 }
