@@ -14,5 +14,6 @@ public class RegisterPayload implements Serializable {
 	String email;
 	Set<String> role;
 	String password;
+	String repeatPassword;
 	List<String> imageUrls;
 }

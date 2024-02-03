@@ -28,4 +28,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             WHERE c.id = :categoryId
             """)
     Optional<List<Event>> findAllByCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query("""
+            SELECT e FROM Event e
+            ORDER BY e.dateOfCreation DESC
+            LIMIT 4
+            """)
+    Optional<List<Event>> findLatest();
 }

@@ -48,6 +48,9 @@ public class AuthService {
         if (userRepository.existsByEmail(data.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
         }
+        if (!data.getPassword().equals(data.getRepeatPassword())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Passwords do not match!"));
+        }
 
         User user = User.builder()
                 .username(data.getUsername())

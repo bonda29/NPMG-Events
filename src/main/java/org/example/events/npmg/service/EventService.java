@@ -39,6 +39,12 @@ public class EventService {
         return ResponseEntity.ok(new MessageResponse("Event created successfully!"));
     }
 
+    public ResponseEntity<EventDto> getEventById(Long id) {
+        Event event = findById(eventRepository, id);
+        EventDto eventDto = eventMapper.toDto(event);
+        return ResponseEntity.ok().body(eventDto);
+    }
+
     public ResponseEntity<List<EventDto>> getAllEvents() {
 
         List<Event> events = eventRepository.findAll();
@@ -47,10 +53,10 @@ public class EventService {
         return ResponseEntity.ok().body(eventDtos);
     }
 
-    public ResponseEntity<EventDto> getEventById(Long id) {
-        Event event = findById(eventRepository, id);
-        EventDto eventDto = eventMapper.toDto(event);
-        return ResponseEntity.ok().body(eventDto);
+    public ResponseEntity<List<EventDto>> getLatest() {
+        List<Event> events = eventRepository.findLatest().orElse(null);
+        List<EventDto> eventDtos = eventMapper.toDto(events);
+        return ResponseEntity.ok().body(eventDtos);
     }
 
     public ResponseEntity<MessageResponse> updateEvent(Long id, EventDto data) {

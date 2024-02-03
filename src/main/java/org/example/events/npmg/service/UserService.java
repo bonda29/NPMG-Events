@@ -51,15 +51,15 @@ public class UserService {
         return ResponseEntity.ok(new MessageResponse("User's role has been changed successfully!"));
     }
 
-    public ResponseEntity<MessageResponse> changeUserPassword(Long userId, String password) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    user.setPassword(password);
-                    userRepository.save(user);
-                    return ResponseEntity.ok(new MessageResponse("User's password has been changed successfully!"));
-                })
-                .orElseGet(() -> ResponseEntity.badRequest().body(new MessageResponse("User not found!")));
-    }
+//    public ResponseEntity<MessageResponse> changeUserPassword(Long userId, String password) {
+//        return userRepository.findById(userId)
+//                .map(user -> {
+//                    user.setPassword(password);
+//                    userRepository.save(user);
+//                    return ResponseEntity.ok(new MessageResponse("User's password has been changed successfully!"));
+//                })
+//                .orElseGet(() -> ResponseEntity.badRequest().body(new MessageResponse("User not found!")));
+//    }
 
 
 }
