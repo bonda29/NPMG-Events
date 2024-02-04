@@ -36,4 +36,10 @@ public class GlobalExceptionHandler {
 		logger.error("EventWithoutDataException", exception);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(exception.getMessage()));
 	}
+
+	@ExceptionHandler(EmailNotAssociatedWithUserException.class)
+	public ResponseEntity<Object> handleEmailNotAssociatedWithUserException(EmailNotAssociatedWithUserException exception) {
+		logger.error("EmailNotAssociatedWithUserException", exception);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(exception.getMessage()));
+	}
 }
