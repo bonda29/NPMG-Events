@@ -15,6 +15,8 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
+
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
     Optional<Set<User>> findByRolesName(@Param("roleName") ERole role);
 
@@ -26,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+
+
 }

@@ -54,8 +54,8 @@ public class User {
 
     private String profilePictureUrl;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private CodeSentToMail codeSentToMail;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private PasswordResetToken passwordResetToken;
 
     @PrePersist
     protected void onCreate() {

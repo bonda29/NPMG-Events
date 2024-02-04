@@ -23,6 +23,7 @@ public class UserDto {
     private String username;
     @Email
     private String email;
+    private String password; // TODO: remove this field from the DTO
     private Set<Role> roles;
     private LocalDateTime dateOfCreation;
     private String profilePictureUrl;
