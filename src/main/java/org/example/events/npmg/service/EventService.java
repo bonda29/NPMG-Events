@@ -2,7 +2,7 @@ package org.example.events.npmg.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.events.npmg.config.Mapper.EventMapper;
-import org.example.events.npmg.exceptions.EventWithoutDataException;
+import org.example.events.npmg.exceptions.ObjectWithoutDataException;
 import org.example.events.npmg.models.Event;
 import org.example.events.npmg.payload.DTOs.EventDto;
 import org.example.events.npmg.payload.response.MessageResponse;
@@ -26,11 +26,12 @@ public class EventService {
 
 
     public ResponseEntity<MessageResponse> createEvent(EventDto data) {
+        //TODO: validate data f.e. if name is too long
 
         if (data.getName() == null) {
-            throw new EventWithoutDataException("Event must have a 'name'!");
+            throw new ObjectWithoutDataException("Event must have a 'name'!");
         } else if (data.getContent() == null) {
-            throw new EventWithoutDataException("Event must have a 'content'!");
+            throw new ObjectWithoutDataException("Event must have a 'content'!");
         }
 
         Event event = eventMapper.toEntity(data);
@@ -60,6 +61,7 @@ public class EventService {
     }
 
     public ResponseEntity<MessageResponse> updateEvent(Long id, EventDto data) {
+        //TODO: validate data
         Event event = findById(eventRepository, id);
         modelMapper.map(data, event);
         eventRepository.save(event);

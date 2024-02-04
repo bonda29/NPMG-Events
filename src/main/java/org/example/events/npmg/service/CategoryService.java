@@ -2,6 +2,9 @@ package org.example.events.npmg.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.events.npmg.config.Mapper.CategoryMapper;
+import org.example.events.npmg.exceptions.NotUniqueException;
+import org.example.events.npmg.exceptions.ObjectWithoutDataException;
+import org.example.events.npmg.exceptions.TextToBigException;
 import org.example.events.npmg.models.Category;
 import org.example.events.npmg.models.Event;
 import org.example.events.npmg.payload.DTOs.CategoryDto;
@@ -27,14 +30,24 @@ public class CategoryService {
     private final ModelMapper modelMapper;
 
     public ResponseEntity<MessageResponse> createCategory(CategoryDto categoryDto) {
-        if (categoryDto.getName() == null) {
-            throw new RuntimeException("Category must have a 'name'!");
-        }
+        validateCategoryData(categoryDto);
 
         Category category = categoryMapper.toEntity(categoryDto);
-        category = categoryRepository.save(category);
+        categoryRepository.save(category);
 
         return ResponseEntity.ok(new MessageResponse("Category created successfully!"));
+    }
+
+    private void validateCategoryData(CategoryDto categoryDto) {
+        if (categoryDto.getName() == null) {
+            throw new ObjectWithoutDataException("Category must have a 'name'!");
+        } else if (categoryDto.getDescription() == null) {
+            throw new ObjectWithoutDataException("Category must have a 'description'!");
+        } else if (categoryRepository.existsByName(categoryDto.getName())) {
+            throw new NotUniqueException("Category name is already taken!");
+        } else if (categoryDto.getName().length() > 30) {
+            throw new TextToBigException("Category name is too long!");
+        }
     }
 
     public ResponseEntity<CategoryDto> getCategoryById(Long id) {
@@ -49,6 +62,7 @@ public class CategoryService {
     }
 
     public ResponseEntity<MessageResponse> updateCategory(Long id, CategoryDto categoryDto) {
+        //TODO: validate category data
         Category category = findById(categoryRepository, id);
         modelMapper.map(categoryDto, category);
         categoryRepository.save(category);
@@ -66,4 +80,6 @@ public class CategoryService {
         categoryRepository.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Category deleted successfully!"));
     }
+    
+    
 }

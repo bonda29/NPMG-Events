@@ -1,4 +1,4 @@
-package org.example.events.npmg.service;
+package org.example.events.npmg.payload.request;
 
 import lombok.Data;
 
