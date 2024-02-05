@@ -34,7 +34,7 @@ public class ForgotPasswordService {
     private static final String RESET_TOKEN_URL = "http://localhost:8080/resetPassword/";
     private static final Integer MULTIPART_MODE = MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
     private static final String CHARSET = StandardCharsets.UTF_8.name();
-    private static final String FROM_ADDRESS = "admin@bonda.tech";
+    private static final String FROM_ADDRESS = "no-reply@bonda.tech";
     private static final String EMAIL_SUBJECT = "Reset Password Link";
     private static final String TEMPLATE_NAME = "forgotPasswordEmailTemplate";
     private static final String CONTEXT_KEY = "forgotPasswordLink";
