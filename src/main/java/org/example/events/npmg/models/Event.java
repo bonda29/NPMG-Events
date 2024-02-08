@@ -20,11 +20,9 @@ public class Event {
 
     private String content;
 
-    @ManyToMany
-    @JoinTable(name = "events_categories",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "categories_id"))
-    private Set<Category> categories = new LinkedHashSet<>();
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -32,12 +30,10 @@ public class Event {
 
     private LocalDateTime dateOfCreation;
 
-
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "event_image_urls", joinColumns = @JoinColumn(name = "event_id"))
     @Column(name = "image_url")
     private List<String> imageUrls;
-
 
     @PrePersist
     protected void onCreate() {

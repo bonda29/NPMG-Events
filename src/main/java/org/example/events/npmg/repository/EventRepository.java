@@ -15,16 +15,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("""
             SELECT e FROM Event e
-            JOIN e.categories c
+            JOIN e.category c
             WHERE e.name LIKE CONCAT(:eventName, '%')
             AND c.name = :categoryName
             AND e.dateOfCreation > :date
             """)
-    Optional<List<Event>> findEvents(@Param("eventName") String eventName, @Param("categoryName") String categoryName, @Param("date") LocalDateTime date);
+    Optional<List<Event>> searchEventsByNameCategoryDate(@Param("eventName") String eventName, @Param("categoryName") String categoryName, @Param("date") LocalDateTime date);
 
     @Query("""
             SELECT e FROM Event e
-            JOIN e.categories c
+            JOIN e.category c
             WHERE c.id = :categoryId
             """)
     Optional<List<Event>> findAllByCategoryId(@Param("categoryId") Long categoryId);

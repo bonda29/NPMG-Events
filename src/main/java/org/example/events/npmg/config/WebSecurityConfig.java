@@ -51,7 +51,7 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
-				.cors() // Enable CORS
+				.cors()
 				.and()
 				.csrf(AbstractHttpConfigurer::disable)
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
@@ -65,6 +65,8 @@ public class WebSecurityConfig {
 				)
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+				.headers().frameOptions().disable()
+				.and()
 				.build();
 	}
 }

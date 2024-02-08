@@ -14,7 +14,7 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    private String description;
+    private String iconPath;
 
     private String imageUrl;
 }

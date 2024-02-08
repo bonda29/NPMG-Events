@@ -15,7 +15,7 @@ import java.util.Set;
 public class EventDto {
     private String name;
     private String content;
-    private Set<Long> categoriesIds;
+    private Long categoryId;
     private Long userId;
     private LocalDateTime dateOfCreation;
     private List<String> imageUrls;

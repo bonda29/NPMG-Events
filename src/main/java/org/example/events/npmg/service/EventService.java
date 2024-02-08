@@ -26,13 +26,18 @@ public class EventService {
 
 
     public ResponseEntity<MessageResponse> createEvent(EventDto data) {
-        //TODO: validate data f.e. if name is too long
-
         if (data.getName() == null) {
             throw new ObjectWithoutDataException("Event must have a 'name'!");
         } else if (data.getContent() == null) {
             throw new ObjectWithoutDataException("Event must have a 'content'!");
+        } else if (data.getCategoryId() == null) {
+            throw new ObjectWithoutDataException("Event must have a 'categoryId'!");
+        } else if (data.getUserId() == null) {
+            throw new ObjectWithoutDataException("Event must have a 'userId'!");
+        } else if (data.getName().length() > 100) {
+            throw new ObjectWithoutDataException("Event name is too long!");
         }
+
 
         Event event = eventMapper.toEntity(data);
         eventRepository.save(event);
@@ -74,7 +79,7 @@ public class EventService {
     }
 
     public ResponseEntity<?> searchEvents(String eventName, String categoryName, LocalDateTime date) {
-        Optional<List<Event>> events = eventRepository.findEvents(eventName, categoryName, date);
+        Optional<List<Event>> events = eventRepository.searchEventsByNameCategoryDate(eventName, categoryName, date);
         if (events.isPresent()) {
             return ResponseEntity.ok().body(eventMapper.toDto(events.get()));
         }

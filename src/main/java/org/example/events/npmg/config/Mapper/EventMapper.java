@@ -36,9 +36,8 @@ public class EventMapper {
             protected void configure() {
                 map().setUserId(source.getUser().getId());
 
-                // Null check is added here
-                if (source.getCategories() != null) {
-                    map().setCategoriesIds(source.getCategories().stream().map(Category::getId).collect(Collectors.toSet()));
+                if (source.getCategory() != null) {
+                    map().setCategoryId(source.getCategory().getId());
                 }
             }
         });
@@ -58,10 +57,11 @@ public class EventMapper {
         Event event = modelMapper.map(dto, Event.class);
         event.setUser(findById(userRepository, dto.getUserId()));
 
-        if (dto.getCategoriesIds() != null) {
-            event.setCategories(dto.getCategoriesIds().stream().map(id -> findById(categoryRepository, id)).collect(Collectors.toSet()));
-        } else {
-            event.setCategories(new HashSet<>());
+        if (dto.getCategoryId() != null) {
+            event.setCategory(findById(categoryRepository, dto.getCategoryId()));
+        }
+        else {
+            event.setCategory(null);
         }
 
         return event;

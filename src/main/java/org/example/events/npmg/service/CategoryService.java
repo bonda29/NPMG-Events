@@ -41,8 +41,6 @@ public class CategoryService {
     private void validateCategoryData(CategoryDto categoryDto) {
         if (categoryDto.getName() == null) {
             throw new ObjectWithoutDataException("Category must have a 'name'!");
-        } else if (categoryDto.getDescription() == null) {
-            throw new ObjectWithoutDataException("Category must have a 'description'!");
         } else if (categoryRepository.existsByName(categoryDto.getName())) {
             throw new NotUniqueException("Category name is already taken!");
         } else if (categoryDto.getName().length() > 30) {
@@ -72,10 +70,8 @@ public class CategoryService {
     public ResponseEntity<MessageResponse> deleteCategory(Long id) {
         List<Event> events = eventRepository.findAllByCategoryId(id).orElse(null);
         assert events != null;
-        events.forEach(event -> {
-            event.getCategories().removeIf(category -> category.getId().equals(id));
-            eventRepository.save(event);
-        });
+        events.forEach(event -> event.setCategory(null));
+        eventRepository.saveAll(events);
 
         categoryRepository.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Category deleted successfully!"));

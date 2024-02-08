@@ -12,6 +12,6 @@ import java.io.Serializable;
 @Data
 public class CategoryDto {
     String name;
-    String description;
+    String iconUrl;
     String imageUrl;
 }
