@@ -13,6 +13,6 @@ import java.io.Serializable;
 public class CategoryDto {
     Long id;
     String name;
-    String iconUrl;
+    String iconPath;
     String imageUrl;
 }
