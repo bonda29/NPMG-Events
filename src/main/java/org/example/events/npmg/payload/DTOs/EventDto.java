@@ -13,6 +13,7 @@ import java.util.Set;
  */
 @Data
 public class EventDto {
+    Long id;
     private String name;
     private String content;
     private Long categoryId;

@@ -19,6 +19,7 @@ import java.util.Set;
  */
 @Data
 public class UserDto {
+    Long id;
     @NotEmpty(message = "Username is mandatory!")
     private String username;
     @Email
